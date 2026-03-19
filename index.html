@@ -21,86 +21,128 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);font-size:13px
 
 /* ── MOBILE RESPONSIVE ── */
 @media(max-width:600px){
-  /* Header — stack vertically on mobile */
-  .hdr{grid-template-columns:1fr 1fr;grid-template-rows:auto auto}
-  .th.rcb{border-right:none;border-bottom:1px solid var(--b);padding:12px 12px 10px}
-  .th.srh{border-left:none;border-bottom:none;padding:12px 12px 10px}
-  .ctr{grid-column:1/-1;order:-1;flex-direction:row;justify-content:center;padding:10px 14px;gap:14px;border-bottom:1px solid var(--b)}
-  .vbo{width:100%;max-width:180px;height:10px;min-height:unset;flex-direction:row}
-  .vbr{height:100%;width:50%;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
-  .vbs{height:100%;width:50%;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
-  .cpct{display:none}
-  .mdt{font-size:8px;line-height:1.6;text-align:left}
-  .vs{display:none}
-  .tc{font-size:32px}
-  .tst{gap:8px;flex-wrap:wrap}
+
+  /* ── HEADER: proper 2-col side by side, no center block ── */
+  .hdr{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .th.rcb{border-right:1px solid var(--b);border-bottom:none;padding:10px 10px 8px}
+  .th.srh{border-left:none;border-bottom:none;padding:10px 10px 8px;text-align:right}
+  .srh .tst{justify-content:flex-end}
+  .srh .tsb{align-items:flex-end}
+
+  /* Hide center vertical bar — move match info inline */
+  .ctr{display:none}
+
+  /* Compact team name */
+  .sysid{display:none}
+  .tc{font-size:36px;letter-spacing:-1px}
+  .tn{font-size:7px}
+  .tst{gap:6px;margin-top:6px;flex-wrap:wrap}
+  .tsl{font-size:6px}
   .tsv{font-size:12px}
+  .inj-row{margin-top:6px;gap:3px}
+  .inj{font-size:5px;padding:2px 4px}
 
-  /* Prob bar */
-  .pbr{grid-template-columns:42px 1fr 42px;gap:6px;padding:7px 12px}
-  .pp{font-size:15px}
+  /* Match date bar below header */
+  .hdr::after{
+    content:'28 MAR 2026 · M CHINNASWAMY · 19:30 IST';
+    grid-column:1/-1;
+    display:block;
+    font-family:var(--mono);
+    font-size:7px;
+    color:var(--t3);
+    text-align:center;
+    padding:5px 12px;
+    border-top:1px solid var(--b);
+    letter-spacing:0.08em;
+  }
 
-  /* Tabs — scrollable already, just reduce padding */
-  .tab{padding:8px 10px;font-size:7px}
+  /* ── PROB BAR ── */
+  .pbr{grid-template-columns:40px 1fr 40px;gap:5px;padding:6px 10px}
+  .pp{font-size:16px}
 
-  /* Prediction cards — stack on mobile */
-  .pred-split{grid-template-columns:1fr 1fr;gap:6px}
-  .pc-pct{font-size:28px}
-  .pc-sub{font-size:7px}
+  /* ── VERDICT ── */
+  .vr{padding:5px 10px}
+  .vt{font-size:8px}
+  .cf{font-size:6px;padding:2px 6px}
 
-  /* Factors — single column on mobile */
-  .factors-mini{grid-template-columns:1fr}
+  /* ── TABS ── */
+  .tab{padding:7px 9px;font-size:7px;letter-spacing:0.08em}
 
-  /* Model performance gauges — stack */
-  .gauge-row{grid-template-columns:1fr}
-
-  /* Squads — stack on mobile, full width each */
-  .sq-split{grid-template-columns:1fr}
-  .sqh-half{border-right:none;border-bottom:1px solid var(--b2)}
-  .sq-scroll{max-height:none}
-  .pn{font-size:9px}
-  .pm{font-size:7px}
-
-  /* Stat grids */
-  .sg2{grid-template-columns:1fr 1fr}
-  .sg3{grid-template-columns:1fr 1fr}
-
-  /* Live scores */
-  .live-scores-grid{grid-template-columns:1fr 1fr;gap:6px}
-
-  /* News filters — wrap */
-  .news-filters{gap:4px}
-  .ntog{font-size:7px;padding:3px 6px}
-
-  /* Data rows — shrink text */
-  .dl{font-size:8px}
-  .dv{font-size:8px}
-
-  /* Section padding */
-  .sec{padding:5px 12px}
-  .dr{padding:6px 12px}
-
-  /* Model switch */
-  .model-switch{padding:8px 12px}
+  /* ── PREDICT TAB ── */
+  .model-switch{padding:7px 10px;gap:8px}
   .ms-label{font-size:7px}
+  .toggle-opt{font-size:7px}
+
+  /* Prediction cards — side by side but smaller */
+  .pred-main{padding:10px 10px}
+  .pred-split{grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+  .pc-lbl{font-size:6px}
+  .pc-pct{font-size:26px}
+  .pc-sub{font-size:6px;line-height:1.5}
+  .pred-card{padding:8px 10px}
 
   /* Injury strip */
+  .inj-strip{padding:7px 10px}
+  .inj-title{font-size:6px}
+  .inj-item{margin-bottom:3px}
   .inj-name{font-size:7px}
   .inj-delta{font-size:8px}
 
-  /* Reduce inner padding */
-  .pred-main{padding:12px 12px}
-  .perf-panel{padding:10px 12px}
-  .live-body{padding:10px 12px}
-  .live-msg{font-size:8px}
+  /* Factors — single column */
+  .factors-mini{grid-template-columns:1fr;gap:5px;margin-bottom:8px}
+  .fm-card{padding:7px 10px}
+  .fm-name{font-size:6px}
+  .fm-wt{font-size:9px}
+  .fm-rv,.fm-sv{font-size:6px}
 
-  /* Feature importance */
-  .fi-n{width:80px;font-size:7px}
+  /* Model perf gauges — stack */
+  .gauge-row{grid-template-columns:1fr;gap:6px;margin-bottom:10px}
+  .perf-panel{padding:10px 10px}
+  .g-val{font-size:22px}
+  .g-sub{font-size:6px}
+  .fi-n{width:90px;font-size:7px}
   .fi-v{font-size:7px}
+  .model-note{padding:8px 10px;margin-top:8px}
+  .mn-key{min-width:60px;font-size:6px}
+  .mn-val{font-size:6px}
 
-  /* Model note */
-  .mn-key{min-width:70px;font-size:7px}
-  .mn-val{font-size:7px}
+  /* ── SQUADS — stack vertically ── */
+  .sq-split{grid-template-columns:1fr}
+  .sqh-half{border-right:none;border-bottom:2px solid var(--b2)}
+  .sq-scroll{max-height:none;overflow:visible}
+  .pn{font-size:8px}
+  .pm{font-size:6px}
+  .psc{font-size:9px}
+  .pi{width:20px;height:20px;font-size:7px}
+  .spark{height:10px}
+  .spb{width:3px}
+
+  /* ── H2H STATS ── */
+  .sg2{grid-template-columns:1fr 1fr}
+  .sg3{grid-template-columns:1fr 1fr}
+  .scv{font-size:18px}
+  .scl{font-size:6px}
+  .scs{font-size:6px}
+  .sc{padding:8px 10px}
+  .dr{padding:6px 10px}
+  .dl{font-size:8px}
+  .dv{font-size:8px}
+  .sec{padding:5px 10px}
+  .note{padding:6px 10px;font-size:6px}
+
+  /* ── LIVE ── */
+  .live-body{padding:10px 10px}
+  .live-msg{font-size:8px;padding:8px 10px}
+  .live-scores-grid{grid-template-columns:1fr 1fr;gap:6px}
+  .lsc-score{font-size:18px}
+
+  /* ── NEWS ── */
+  .news-header{padding:8px 10px}
+  .news-filters{padding:6px 10px;gap:3px}
+  .ntog{font-size:6px;padding:2px 6px}
+  .ni{padding:8px 10px}
+  .nh{font-size:8px}
+  .nm{font-size:6px}
 }
 .hdr{display:grid;grid-template-columns:1fr 150px 1fr;border-bottom:1px solid var(--b2);background:var(--s1)}
 .th{padding:16px 14px;position:relative;overflow:hidden}
@@ -611,8 +653,7 @@ function compute(){
   document.getElementById('hbr').style.width=dispR+'%';document.getElementById('hbs').style.width=dispS+'%';
   const isMobile=window.innerWidth<=600;
   const vbr=document.getElementById('vbr'),vbs=document.getElementById('vbs');
-  if(isMobile){vbr.style.width=dispR+'%';vbr.style.height='100%';vbs.style.width=dispS+'%';vbs.style.height='100%';}
-  else{vbr.style.height=dispR+'%';vbr.style.width='100%';vbs.style.height=dispS+'%';vbs.style.width='100%';}
+  if(!isMobile){vbr.style.height=dispR+'%';vbr.style.width='100%';vbs.style.height=dispS+'%';vbs.style.width='100%';}
   document.getElementById('cpct').textContent=dispR+'|'+dispS;
   const winner=dispR>=dispS?'RCB PREDICTED TO WIN':'SRH PREDICTED TO WIN';
   const margin=Math.abs(dispR-dispS);
