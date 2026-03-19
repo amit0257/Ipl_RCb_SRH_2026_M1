@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RCB vs SRH · IPL 2026 · War Room Predictor</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#020305;--s1:#06090F;--s2:#0C1018;--s3:#121820;
+  --b:rgba(255,255,255,0.06);--b2:rgba(255,255,255,0.12);--b3:rgba(255,255,255,0.2);
+  --rcb:#C8371A;--rcbm:rgba(200,55,26,0.22);
+  --srh:#C47F17;--srhm:rgba(196,127,23,0.22);
+  --t1:rgba(255,255,255,0.92);--t2:rgba(255,255,255,0.55);--t3:rgba(255,255,255,0.28);--t4:rgba(255,255,255,0.08);
+  --ok:#34C759;--warn:#FFD60A;--err:#FF453A;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+}
+body{background:var(--bg);color:var(--t1);font-family:var(--sans);font-size:13px}
+.app{background-image:linear-gradient(var(--b) 1px,transparent 1px),linear-gradient(90deg,var(--b) 1px,transparent 1px);background-size:32px 32px;min-height:100vh}
+.hdr{display:grid;grid-template-columns:1fr 150px 1fr;border-bottom:1px solid var(--b2);background:var(--s1)}
+.th{padding:16px 14px;position:relative;overflow:hidden}
+.th.rcb{border-right:1px solid var(--b)}.th.srh{border-left:1px solid var(--b);text-align:right}
+.th::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);animation:scan 6s linear infinite}
+.srh::after{animation-delay:3s}
+@keyframes scan{0%{top:0;opacity:0.8}100%{top:100%;opacity:0}}
+.sysid{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.18em;margin-bottom:7px}
+.tc{font-family:var(--mono);font-size:44px;font-weight:700;line-height:1;letter-spacing:-2px}
+.rcb .tc{color:var(--rcb)}.srh .tc{color:var(--srh)}
+.tn{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}
+.tst{display:flex;gap:12px;margin-top:10px}
+.srh .tst{justify-content:flex-end}
+.tsb{display:flex;flex-direction:column;gap:1px}
+.srh .tsb{align-items:flex-end}
+.tsl{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.08em;text-transform:uppercase}
+.tsv{font-family:var(--mono);font-size:14px;font-weight:600}
+.rcb .tsv.a{color:var(--rcb)}.srh .tsv.a{color:var(--srh)}
+.inj-row{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}
+.srh .inj-row{justify-content:flex-end}
+.inj{font-family:var(--mono);font-size:6px;font-weight:600;letter-spacing:0.08em;padding:2px 5px;border:1px solid;text-transform:uppercase}
+.i-out{color:var(--err);border-color:rgba(255,69,58,0.3);background:rgba(255,69,58,0.06)}
+.i-doubt{color:var(--warn);border-color:rgba(255,214,10,0.3);background:rgba(255,214,10,0.06)}
+.i-ok{color:var(--ok);border-color:rgba(52,199,89,0.3);background:rgba(52,199,89,0.06)}
+.ctr{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 6px;gap:5px;background:var(--bg)}
+.vs{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.3em}
+.vbo{width:22px;flex:1;min-height:60px;background:var(--s3);border:1px solid var(--b);display:flex;flex-direction:column-reverse;overflow:hidden}
+.vbr{background:var(--rcb);width:100%;transition:height 0.6s cubic-bezier(0.4,0,0.2,1)}
+.vbs{background:var(--srh);width:100%;transition:height 0.6s cubic-bezier(0.4,0,0.2,1)}
+.cpct{font-family:var(--mono);font-size:8px;color:var(--t2);text-align:center;line-height:1.7}
+.mdt{font-family:var(--mono);font-size:7px;color:var(--t3);text-align:center;line-height:1.8}
+.pbr{display:grid;grid-template-columns:50px 1fr 50px;align-items:center;gap:8px;padding:8px 14px;background:var(--s1);border-bottom:1px solid var(--b2)}
+.pp{font-family:var(--mono);font-size:18px;font-weight:700;line-height:1;transition:all 0.3s}
+.pp.r{color:var(--rcb)}.pp.s{color:var(--srh);text-align:right}
+.hb{height:3px;background:var(--s3);display:flex;overflow:hidden}
+.hbr{background:var(--rcb);transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
+.hbs{background:var(--srh);transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
+.vr{display:flex;align-items:center;justify-content:space-between;padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--b2)}
+.vt{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:0.04em}
+.cf{font-family:var(--mono);font-size:7px;font-weight:600;letter-spacing:0.15em;padding:2px 7px;border:1px solid;text-transform:uppercase}
+.ch{color:var(--ok);border-color:rgba(52,199,89,0.3);background:rgba(52,199,89,0.06)}
+.cm{color:var(--warn);border-color:rgba(255,214,10,0.3);background:rgba(255,214,10,0.06)}
+.cl{color:var(--err);border-color:rgba(255,69,58,0.3);background:rgba(255,69,58,0.06)}
+.tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--b2);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);padding:9px 12px;border:none;background:none;cursor:pointer;border-bottom:1px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color 0.15s}
+.tab.active{color:var(--t1);border-bottom-color:var(--t1)}
+.tab:hover:not(.active){color:var(--t2)}
+.panel{display:none}.panel.active{display:block;animation:fu 0.2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.sec{display:flex;align-items:center;gap:10px;padding:6px 14px;border-bottom:1px solid var(--b);background:var(--bg)}
+.stx{font-family:var(--mono);font-size:7px;font-weight:600;letter-spacing:0.2em;color:var(--t3);text-transform:uppercase;white-space:nowrap}
+.sl{flex:1;height:1px;background:var(--b)}
+.model-switch{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--b);background:var(--s1)}
+.ms-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.12em;text-transform:uppercase}
+.toggle-wrap{display:flex;align-items:center;gap:8px}
+.toggle-opt{font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);transition:color 0.2s;cursor:pointer}
+.toggle-opt.active-l{color:var(--warn)}.toggle-opt.active-r{color:var(--ok)}
+.toggle-track{width:36px;height:18px;background:var(--s3);border:1px solid var(--b2);border-radius:10px;position:relative;cursor:pointer;transition:background 0.3s;flex-shrink:0}
+.toggle-track.on{background:rgba(52,199,89,0.15);border-color:rgba(52,199,89,0.3)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:10px;height:10px;border-radius:50%;background:var(--warn);transition:all 0.3s cubic-bezier(0.4,0,0.2,1)}
+.toggle-track.on .toggle-thumb{left:21px;background:var(--ok)}
+.pred-main{padding:16px 14px;border-bottom:1px solid var(--b)}
+.pred-split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.pred-card{background:var(--s2);border:1px solid var(--b);padding:12px 14px;position:relative;overflow:hidden}
+.pred-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.pred-card.rcb-card::before{background:var(--rcb)}.pred-card.srh-card::before{background:var(--srh)}
+.pc-lbl{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:5px}
+.pc-pct{font-family:var(--mono);font-size:36px;font-weight:700;line-height:1;transition:all 0.4s}
+.pc-pct.r{color:var(--rcb)}.pc-pct.s{color:var(--srh)}
+.pc-sub{font-family:var(--mono);font-size:8px;color:var(--t3);margin-top:5px;line-height:1.7}
+.inj-strip{background:var(--s2);border:1px solid var(--b);padding:8px 12px}
+.inj-title{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:7px}
+.inj-item{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.inj-name{font-family:var(--mono);font-size:8px;color:var(--t2)}
+.inj-delta{font-family:var(--mono);font-size:9px;font-weight:700}
+.inj-delta.neg{color:var(--err)}.inj-delta.pos{color:var(--ok)}.inj-delta.neu{color:var(--t3)}
+.factors-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.fm-card{background:var(--s2);border:1px solid var(--b);padding:8px 10px}
+.fm-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.fm-name{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.08em;text-transform:uppercase}
+.fm-wt{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--t1)}
+.fm-bar{height:2px;background:var(--s3);display:flex;overflow:hidden;margin-bottom:4px}
+.fm-r{background:var(--rcb)}.fm-s{background:var(--srh)}
+.fm-vals{display:flex;justify-content:space-between}
+.fm-rv{font-family:var(--mono);font-size:7px;color:var(--rcb)}.fm-sv{font-family:var(--mono);font-size:7px;color:var(--srh)}
+input[type=range]{width:100%;height:2px;-webkit-appearance:none;background:var(--s3);outline:none;cursor:pointer;border:none;margin-top:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:9px;height:9px;background:var(--t1);cursor:pointer;transition:transform 0.1s}
+input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.5)}
+.perf-panel{padding:14px}
+.gauge-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.gauge{background:var(--s2);border:1px solid var(--b);padding:12px 14px}
+.g-lbl{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px}
+.g-val{font-family:var(--mono);font-size:28px;font-weight:700;line-height:1}
+.g-sub{font-family:var(--mono);font-size:7px;color:var(--t3);margin-top:3px;line-height:1.7}
+.g-bar{height:2px;background:var(--s3);overflow:hidden;margin-top:8px}
+.g-fill{height:100%}
+.fi-title{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px}
+.fi-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.fi-n{font-family:var(--mono);font-size:8px;color:var(--t2);width:100px;flex-shrink:0}
+.fi-b{flex:1;height:2px;background:var(--s3);overflow:hidden}
+.fi-f{height:100%;background:var(--t2)}
+.fi-v{font-family:var(--mono);font-size:8px;color:var(--t3);width:32px;text-align:right}
+.model-note{background:var(--s2);border:1px solid var(--b);padding:10px 14px;margin-top:12px}
+.mn-row{display:flex;gap:8px;margin-bottom:6px;align-items:flex-start}
+.mn-row:last-child{margin-bottom:0}
+.mn-key{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;min-width:90px}
+.mn-val{font-family:var(--mono);font-size:7px;color:var(--t2);line-height:1.7}
+.dr{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-bottom:1px solid var(--b);transition:background 0.15s}
+.dr:hover{background:var(--s1)}
+.dl{font-family:var(--mono);font-size:9px;color:var(--t2)}
+.dv{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--t1)}
+.dv.r{color:var(--rcb)}.dv.s{color:var(--srh)}.dv.ok{color:var(--ok)}
+.ib{flex:1;height:2px;background:var(--s3);display:flex;overflow:hidden;margin:0 10px}
+.ibr{background:var(--rcb)}.ibs{background:var(--srh)}
+.sg2{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--b)}
+.sg3{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--b)}
+.sc{padding:9px 12px;border-right:1px solid var(--b)}.sc:last-child{border-right:none}
+.scl{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px}
+.scv{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1}
+.scs{font-family:var(--mono);font-size:7px;color:var(--t3);margin-top:2px}
+.note{padding:8px 14px;font-family:var(--mono);font-size:7px;color:var(--t3);line-height:2;border-bottom:1px solid var(--b)}
+.note span{color:var(--t2)}
+.sq-split{display:grid;grid-template-columns:1fr 1fr}
+.sqh-half{border-right:1px solid var(--b)}.sqh-half:last-child{border-right:none}
+.sqhd{padding:7px 12px;border-bottom:1px solid var(--b);background:var(--s1);display:flex;align-items:center;gap:7px}
+.sqhc{font-family:var(--mono);font-size:14px;font-weight:700}
+.rcb-sq .sqhc{color:var(--rcb)}.srh-sq .sqhc{color:var(--srh)}
+.sqhl{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase}
+.sq-sec{padding:4px 12px;border-bottom:1px solid var(--b);font-family:var(--mono);font-size:6px;color:var(--t3);letter-spacing:0.2em;text-transform:uppercase;background:var(--bg)}
+.pr{display:flex;align-items:center;gap:6px;padding:5px 12px;border-bottom:1px solid var(--b);cursor:pointer;transition:background 0.15s;position:relative}
+.pr:hover{background:var(--s1)}
+.pr::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;opacity:0;transition:opacity 0.15s}
+.rcb-sq .pr::before{background:var(--rcb)}.srh-sq .pr::before{background:var(--srh)}
+.pr:hover::before{opacity:1}
+.pi{font-family:var(--mono);font-size:8px;font-weight:700;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border:1px solid;flex-shrink:0}
+.rcb-sq .pi{color:var(--rcb);border-color:var(--rcbm)}.srh-sq .pi{color:var(--srh);border-color:var(--srhm)}
+.pinfo{flex:1;min-width:0}
+.pn{font-family:var(--mono);font-size:8px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm{font-family:var(--mono);font-size:6px;color:var(--t3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spark{display:flex;align-items:flex-end;gap:1px;height:12px;flex-shrink:0}
+.spb{width:4px;min-height:1px;background:var(--t4);transition:background 0.2s}
+.pr:hover .spb{background:var(--t3)}
+.rcb-sq .pr:hover .spb{background:var(--rcb)}.srh-sq .pr:hover .spb{background:var(--srh)}
+.psc{font-family:var(--mono);font-size:10px;font-weight:700;min-width:24px;text-align:right;flex-shrink:0}
+.rcb-sq .psc{color:var(--rcb)}.srh-sq .psc{color:var(--srh)}
+.ptg{font-family:var(--mono);font-size:5px;font-weight:600;letter-spacing:0.08em;padding:1px 3px;border:1px solid;text-transform:uppercase;flex-shrink:0}
+.tg-fire{color:#FF6B4A;border-color:rgba(255,107,74,0.25)}
+.tg-ok{color:var(--ok);border-color:rgba(52,199,89,0.25)}
+.tg-w{color:var(--warn);border-color:rgba(255,214,10,0.25)}
+.tg-out{color:var(--err);border-color:rgba(255,69,58,0.25)}
+.tg-low{color:var(--t3);border-color:var(--b2)}
+.sq-scroll{max-height:380px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--b2) transparent}
+
+/* ── LIVE STATUS INDICATOR ── */
+.live-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--b);background:var(--s1)}
+.live-status-block{display:flex;align-items:center;gap:10px}
+.status-pill{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;border:1px solid;transition:all 0.4s}
+.status-pill.offline{color:var(--err);border-color:rgba(255,69,58,0.35);background:rgba(255,69,58,0.07)}
+.status-pill.online{color:var(--ok);border-color:rgba(52,199,89,0.35);background:rgba(52,199,89,0.07)}
+.status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background 0.4s}
+.status-pill.offline .status-dot{background:var(--err);animation:pulse-r 2s ease-in-out infinite}
+.status-pill.online .status-dot{background:var(--ok);animation:pulse-g 1.5s ease-in-out infinite}
+@keyframes pulse-r{0%,100%{box-shadow:0 0 0 0 rgba(255,69,58,0.5)}50%{box-shadow:0 0 0 5px rgba(255,69,58,0)}}
+@keyframes pulse-g{0%,100%{box-shadow:0 0 0 0 rgba(52,199,89,0.6)}50%{box-shadow:0 0 0 6px rgba(52,199,89,0)}}
+.live-sub{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.06em;margin-top:2px}
+.fetch-btn{font-family:var(--mono);font-size:7px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--t2);background:none;border:1px solid var(--b2);padding:6px 14px;cursor:pointer;transition:all 0.2s}
+.fetch-btn:hover{color:var(--t1);border-color:var(--b3);background:var(--s2)}
+.fetch-btn:active{transform:scale(0.97)}
+.fetch-btn.loading{opacity:0.35;pointer-events:none}
+.live-body{padding:14px}
+.live-scores-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.lsc{background:var(--s2);border:1px solid var(--b);padding:10px 12px;position:relative}
+.lsc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.lsc.r::before{background:var(--rcb)}.lsc.s::before{background:var(--srh)}
+.lsc-name{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px}
+.lsc-score{font-family:var(--mono);font-size:22px;font-weight:700;line-height:1}
+.lsc-extra{font-family:var(--mono);font-size:7px;color:var(--t3);margin-top:3px}
+.live-msg{font-family:var(--mono);font-size:9px;color:var(--t2);line-height:1.9;white-space:pre-wrap}
+.live-info{font-family:var(--mono);font-size:7px;color:var(--t3);line-height:1.9;margin-top:10px;padding:8px 12px;border:1px solid var(--b);background:var(--s2)}
+.live-timer-row{font-family:var(--mono);font-size:7px;color:var(--t3);margin-top:2px}
+
+/* ── NEWS ── */
+.news-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--b);background:var(--s1)}
+.news-left{display:flex;align-items:center;gap:8px}
+.news-count{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.08em}
+.news-filters{display:flex;align-items:center;gap:5px;padding:8px 14px;border-bottom:1px solid var(--b);background:var(--bg);flex-wrap:wrap}
+.filter-lbl{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.12em;text-transform:uppercase;margin-right:3px}
+.ntog{font-family:var(--mono);font-size:7px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border:1px solid;cursor:pointer;transition:all 0.2s;background:none;opacity:0.38}
+.ntog.active{opacity:1}
+.ntog.n-all{color:var(--t2);border-color:var(--b2)}.ntog.n-all.active{color:var(--t1);border-color:var(--b3);background:var(--s2)}
+.ntog.n-inj{color:var(--err);border-color:rgba(255,69,58,0.3)}.ntog.n-inj.active{background:rgba(255,69,58,0.06)}
+.ntog.n-sq{color:var(--ok);border-color:rgba(52,199,89,0.3)}.ntog.n-sq.active{background:rgba(52,199,89,0.06)}
+.ntog.n-fm{color:var(--srh);border-color:rgba(196,127,23,0.3)}.ntog.n-fm.active{background:rgba(196,127,23,0.06)}
+.ntog.n-ma{color:var(--rcb);border-color:rgba(200,55,26,0.3)}.ntog.n-ma.active{background:rgba(200,55,26,0.06)}
+.ni{padding:9px 14px;border-bottom:1px solid var(--b);cursor:pointer;transition:background 0.15s}
+.ni:hover{background:var(--s1)}.ni.hidden{display:none}
+.ntg{font-family:var(--mono);font-size:6px;font-weight:600;letter-spacing:0.1em;padding:1px 4px;border:1px solid;text-transform:uppercase;display:inline-block;margin-bottom:4px}
+.ntg.tg-inj{color:var(--err);border-color:rgba(255,69,58,0.3);background:rgba(255,69,58,0.06)}
+.ntg.tg-sq{color:var(--ok);border-color:rgba(52,199,89,0.3);background:rgba(52,199,89,0.06)}
+.ntg.tg-fm{color:var(--srh);border-color:rgba(196,127,23,0.3);background:rgba(196,127,23,0.06)}
+.ntg.tg-ma{color:var(--rcb);border-color:rgba(200,55,26,0.3);background:rgba(200,55,26,0.06)}
+.nh{font-family:var(--mono);font-size:9px;font-weight:500;color:var(--t1);line-height:1.5;margin-bottom:2px}
+.nm{font-family:var(--mono);font-size:7px;color:var(--t3)}
+@keyframes tick{from{opacity:0.3;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
+.ticked{animation:tick 0.2s ease}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="th rcb">
+    <div class="sysid">SYS·001 // RCB // IPL 2026 OPENER</div>
+    <div class="tc">RCB</div>
+    <div class="tn">Royal Challengers Bengaluru</div>
+    <div class="tst">
+      <div class="tsb"><div class="tsl">2025</div><div class="tsv a">11/15</div></div>
+      <div class="tsb"><div class="tsl">Win%</div><div class="tsv">73.3</div></div>
+      <div class="tsb"><div class="tsl">H2H Home</div><div class="tsv a">5–3</div></div>
+      <div class="tsb"><div class="tsl">Last 8</div><div class="tsv">7/8</div></div>
+    </div>
+    <div class="inj-row">
+      <span class="inj i-out">HAZLEWOOD OUT</span>
+      <span class="inj i-ok">KOHLI FIT</span>
+      <span class="inj i-ok">PADIKKAL FIT</span>
+    </div>
+  </div>
+  <div class="ctr">
+    <div class="vs">VS</div>
+    <div class="vbo"><div class="vbr" id="vbr" style="height:50%"></div><div class="vbs" id="vbs" style="height:50%"></div></div>
+    <div class="cpct" id="cpct">—</div>
+    <div class="mdt">28 MAR 2026<br>CHINNASWAMY<br>19:30 IST</div>
+  </div>
+  <div class="th srh">
+    <div class="sysid">SYS·002 // SRH // 2024 RUNNERS-UP</div>
+    <div class="tc">SRH</div>
+    <div class="tn">Sunrisers Hyderabad</div>
+    <div class="tst">
+      <div class="tsb" style="align-items:flex-end"><div class="tsl">2025</div><div class="tsv a">6/14</div></div>
+      <div class="tsb" style="align-items:flex-end"><div class="tsl">Win%</div><div class="tsv">42.8</div></div>
+      <div class="tsb" style="align-items:flex-end"><div class="tsl">H2H Away</div><div class="tsv a">3–5</div></div>
+      <div class="tsb" style="align-items:flex-end"><div class="tsl">Last 8</div><div class="tsv">4/8</div></div>
+    </div>
+    <div class="inj-row">
+      <span class="inj i-out">CUMMINS OUT</span>
+      <span class="inj i-doubt">MALINGA DOUBT</span>
+      <span class="inj i-ok">KISHAN CAPT</span>
+    </div>
+  </div>
+</div>
+
+<div class="pbr">
+  <span class="pp r" id="rpp">--%</span>
+  <div style="flex:1"><div class="hb"><div class="hbr" id="hbr" style="width:50%"></div><div class="hbs" id="hbs" style="width:50%"></div></div></div>
+  <span class="pp s" id="spp">--%</span>
+</div>
+<div class="vr">
+  <span class="vt" id="vt">AWAITING INPUT</span>
+  <span class="cf" id="cfb"></span>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="sw('predict',event)">[ PREDICT ]</button>
+  <button class="tab" onclick="sw('live',event)">[ LIVE ]</button>
+  <button class="tab" onclick="sw('squads',event)">[ SQUADS ]</button>
+  <button class="tab" onclick="sw('h2h',event)">[ H2H ]</button>
+  <button class="tab" onclick="sw('news',event)">[ NEWS ]</button>
+</div>
+
+<!-- PREDICT -->
+<div class="panel active" id="tab-predict">
+  <div class="model-switch">
+    <span class="ms-label">[ PREDICTION MODEL ]</span>
+    <div class="toggle-wrap">
+      <span class="toggle-opt active-l" id="lbl-l" onclick="setMode(false)">ML MODEL</span>
+      <div class="toggle-track" id="tog" onclick="toggleMode()"><div class="toggle-thumb"></div></div>
+      <span class="toggle-opt" id="lbl-r" onclick="setMode(true)">WEIGHTED</span>
+    </div>
+  </div>
+  <div style="padding:10px 14px;border-bottom:1px solid var(--b);background:var(--s1);display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <span style="font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase">[ TOSS INPUT ]</span>
+    <select id="toss-sel" onchange="compute()" style="background:var(--s3);border:1px solid var(--b2);color:var(--t1);font-family:var(--mono);font-size:9px;padding:5px 8px;cursor:pointer;appearance:none">
+      <option value="none">-- NOT DECIDED --</option>
+      <option value="RCB">RCB WINS TOSS → FIELD</option>
+      <option value="SRH">SRH WINS TOSS → FIELD</option>
+    </select>
+  </div>
+  <div id="ml-mode">
+    <div class="sec"><span class="stx">ML ENSEMBLE // GRADIENT BOOST + RANDOM FOREST</span><div class="sl"></div></div>
+    <div class="pred-main">
+      <div class="pred-split">
+        <div class="pred-card rcb-card"><div class="pc-lbl">RCB WIN PROBABILITY</div><div class="pc-pct r" id="ml-rcb-pct">24.3%</div><div class="pc-sub">GB: 13.1% · RF: 39.9%<br>TOSS ADJUSTS ±3%</div></div>
+        <div class="pred-card srh-card"><div class="pc-lbl">SRH WIN PROBABILITY</div><div class="pc-pct s" id="ml-srh-pct">75.7%</div><div class="pc-sub">BAT FORM 197 vs 177<br>H2H ADVANTAGE</div></div>
+      </div>
+      <div class="inj-strip">
+        <div class="inj-title">INJURY IMPACT ON BASE PREDICTION</div>
+        <div class="inj-item"><span class="inj-name">BASE ML (NO INJURIES)</span><span class="inj-delta neu">RCB 22.0%</span></div>
+        <div class="inj-item"><span class="inj-name">HAZLEWOOD OUT (7.6 → DUFFY 3.5)</span><span class="inj-delta neg">−5.0%</span></div>
+        <div class="inj-item"><span class="inj-name">CUMMINS OUT (6.6 → ABSENT)</span><span class="inj-delta pos">+4.0%</span></div>
+        <div class="inj-item"><span class="inj-name">MALINGA DOUBTFUL (EV AT 50%)</span><span class="inj-delta pos">+1.5%</span></div>
+        <div style="height:1px;background:var(--b);margin:6px 0"></div>
+        <div class="inj-item"><span class="inj-name" style="color:var(--t1);font-weight:600">FINAL ADJUSTED</span><span class="inj-delta" style="color:var(--rcb);font-size:11px">RCB 24.3%</span></div>
+      </div>
+    </div>
+    <div class="sec"><span class="stx">MODEL PERFORMANCE</span><div class="sl"></div></div>
+    <div class="perf-panel">
+      <div class="gauge-row">
+        <div class="gauge"><div class="g-lbl">GRADIENT BOOSTING</div><div class="g-val" style="color:var(--warn)">49.0%</div><div class="g-sub">5-FOLD CV ± 3.2%<br>1,146 MATCHES · 20 FEATURES</div><div class="g-bar"><div class="g-fill" style="width:49%;background:var(--warn)"></div></div></div>
+        <div class="gauge"><div class="g-lbl">RANDOM FOREST</div><div class="g-val" style="color:var(--ok)">52.4%</div><div class="g-sub">5-FOLD CV ± 4.7%<br>ENSEMBLE WEIGHT: 40%</div><div class="g-bar"><div class="g-fill" style="width:52.4%;background:var(--ok)"></div></div></div>
+      </div>
+      <div class="fi-title">TOP FEATURES // GRADIENT BOOSTING</div>
+      <div class="fi-row"><div class="fi-n">Bowl Form Ratio</div><div class="fi-b"><div class="fi-f" style="width:100%"></div></div><div class="fi-v">11.8%</div></div>
+      <div class="fi-row"><div class="fi-n">Bat Form Ratio</div><div class="fi-b"><div class="fi-f" style="width:94%"></div></div><div class="fi-v">11.1%</div></div>
+      <div class="fi-row"><div class="fi-n">Team Bat Average</div><div class="fi-b"><div class="fi-f" style="width:76%"></div></div><div class="fi-v">9.0%</div></div>
+      <div class="fi-row"><div class="fi-n">Bowl Conceded Avg</div><div class="fi-b"><div class="fi-f" style="width:75%"></div></div><div class="fi-v">8.8%</div></div>
+      <div class="fi-row"><div class="fi-n">Venue Win Rate</div><div class="fi-b"><div class="fi-f" style="width:57%"></div></div><div class="fi-v">6.7%</div></div>
+      <div class="fi-row"><div class="fi-n">H2H Win Rate</div><div class="fi-b"><div class="fi-f" style="width:48%"></div></div><div class="fi-v">5.7%</div></div>
+      <div class="model-note">
+        <div class="mn-row"><span class="mn-key">WHY ~51%?</span><span class="mn-val">IPL is a high-variance sport. Best published models hit 55–58%. Our 52% on 1,146 matches is honest.</span></div>
+        <div class="mn-row"><span class="mn-key">WHY SRH?</span><span class="mn-val">SRH scored 197 avg/match vs RCB 177 recently. H2H 60-40 SRH. Model sees team aggregates not individual stars.</span></div>
+        <div class="mn-row"><span class="mn-key">GAP W/ WEIGHTED?</span><span class="mn-val">Weighted model sees Kohli 9.6, Padikkal 8.4, Unadkat 8.9. ML doesn't. Truth is likely RCB 40–45%.</span></div>
+      </div>
+    </div>
+  </div>
+  <div id="wt-mode" style="display:none">
+    <div class="sec"><span class="stx">WEIGHTED MODEL // ADJUST FEATURE IMPORTANCE</span><div class="sl"></div></div>
+    <div style="padding:12px 14px;border-bottom:1px solid var(--b)">
+      <div class="pred-split" style="margin-bottom:12px">
+        <div class="pred-card rcb-card"><div class="pc-lbl">RCB WIN PROBABILITY</div><div class="pc-pct r" id="wt-rcb-pct">--%</div><div class="pc-sub">WEIGHTED FEATURE MODEL</div></div>
+        <div class="pred-card srh-card"><div class="pc-lbl">SRH WIN PROBABILITY</div><div class="pc-pct s" id="wt-srh-pct">--%</div><div class="pc-sub">DRAG SLIDERS TO ADJUST</div></div>
+      </div>
+      <div class="factors-mini" id="facs"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE -->
+<div class="panel" id="tab-live">
+  <div class="live-header">
+    <div class="live-status-block">
+      <div class="status-pill offline" id="live-pill">
+        <div class="status-dot"></div>
+        <span id="live-pill-txt">NOT LIVE</span>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--t2)" id="live-status-txt">MATCH NOT STARTED</div>
+        <div class="live-timer-row" id="live-timer">NEXT REFRESH: 5:00</div>
+      </div>
+    </div>
+  </div>
+  <div class="live-body">
+    <div class="live-scores-grid" id="live-scores" style="display:none">
+      <div class="lsc r"><div class="lsc-name">RCB</div><div class="lsc-score" id="rcb-score" style="color:var(--rcb)">—</div><div class="lsc-extra" id="rcb-extra">BATTING</div></div>
+      <div class="lsc s"><div class="lsc-name">SRH</div><div class="lsc-score" id="srh-score" style="color:var(--srh)">—</div><div class="lsc-extra" id="srh-extra">BOWLING</div></div>
+    </div>
+    <div class="live-msg" id="live-content">INITIALISING LIVE FEED...
+
+Match: RCB vs SRH
+Date: 28 MAR 2026 · 19:30 IST
+Venue: M Chinnaswamy Stadium, Bengaluru
+
+Auto-refreshes every 5 minutes.</div>
+    <div class="live-info">
+      › Predicted par score: <span style="color:var(--t2)">173 runs</span> · Chinnaswamy chase win rate: <span style="color:var(--t2)">52%</span> · Auto-refreshes every 5 mins
+    </div>
+  </div>
+</div>
+
+<!-- SQUADS -->
+<div class="panel" id="tab-squads">
+  <div class="sq-split">
+    <div class="sqh-half rcb-sq">
+      <div class="sqhd"><span class="sqhc">RCB</span><span class="sqhl">Bengaluru</span></div>
+      <div class="sq-scroll"><div class="sq-sec">BATTING</div><div id="rcb-bat"></div><div class="sq-sec">BOWLING</div><div id="rcb-bowl"></div></div>
+    </div>
+    <div class="sqh-half srh-sq">
+      <div class="sqhd"><span class="sqhc">SRH</span><span class="sqhl">Hyderabad</span></div>
+      <div class="sq-scroll"><div class="sq-sec">BATTING</div><div id="srh-bat"></div><div class="sq-sec">BOWLING</div><div id="srh-bowl"></div></div>
+    </div>
+  </div>
+  <div class="note">FORM: IPL 2024/25 (50%) + T20 INTL 6M (25%) + WC 2026 (25%) · <span>278,205 DELIVERIES</span> · CRICSHEET</div>
+</div>
+
+<!-- H2H -->
+<div class="panel" id="tab-h2h">
+  <div class="sec"><span class="stx">ALL TIME H2H</span><div class="sl"></div></div>
+  <div class="sg2">
+    <div class="sc"><div class="scl">RCB Overall</div><div class="scv" style="color:var(--rcb)">11</div><div class="scs">46% WIN RATE</div></div>
+    <div class="sc"><div class="scl">SRH Overall</div><div class="scv" style="color:var(--srh)">13</div><div class="scs">54% WIN RATE</div></div>
+  </div>
+  <div class="dr"><div class="dl">OVERALL BALANCE</div><div class="ib"><div class="ibr" style="width:46%"></div><div class="ibs" style="width:54%"></div></div><div class="dv s">SRH +2</div></div>
+  <div class="sec"><span class="stx">AT CHINNASWAMY</span><div class="sl"></div></div>
+  <div class="sg2">
+    <div class="sc"><div class="scl">RCB at Venue</div><div class="scv" style="color:var(--rcb)">5</div><div class="scs">62.5%</div></div>
+    <div class="sc"><div class="scl">SRH at Venue</div><div class="scv" style="color:var(--srh)">3</div><div class="scs">37.5%</div></div>
+  </div>
+  <div class="dr"><div class="dl">VENUE BALANCE</div><div class="ib"><div class="ibr" style="width:62%"></div><div class="ibs" style="width:38%"></div></div><div class="dv r">RCB +2</div></div>
+  <div class="sec"><span class="stx">RECENT FORM</span><div class="sl"></div></div>
+  <div class="dr"><div class="dl">RCB 2025 WIN RATE</div><div class="ib"><div class="ibr" style="width:73%"></div></div><div class="dv r">73.3% (11/15)</div></div>
+  <div class="dr"><div class="dl">SRH 2025 WIN RATE</div><div class="ib"><div class="ibs" style="width:43%"></div></div><div class="dv s">42.8% (6/14)</div></div>
+  <div class="dr"><div class="dl">RCB LAST 8</div><div class="ib"><div class="ibr" style="width:87%"></div></div><div class="dv r">87.5% (7/8)</div></div>
+  <div class="dr"><div class="dl">SRH LAST 8</div><div class="ib"><div class="ibs" style="width:50%"></div></div><div class="dv s">50.0% (4/8)</div></div>
+  <div class="sec"><span class="stx">CHINNASWAMY</span><div class="sl"></div></div>
+  <div class="sg3">
+    <div class="sc"><div class="scl">Matches</div><div class="scv">99</div></div>
+    <div class="sc"><div class="scl">Par Score</div><div class="scv">173</div></div>
+    <div class="sc"><div class="scl">Chase Win%</div><div class="scv" style="color:var(--ok)">52%</div><div class="scs">47 OF 90</div></div>
+  </div>
+  <div class="note">› <span>KEY</span>: RCB leads H2H 5–3 at Chinnaswamy despite trailing overall 11–13.<br>› <span>TOSS</span>: 90 of 99 toss winners chose to field. Chasing wins 52% vs 44% batting first.</div>
+</div>
+
+<!-- NEWS -->
+<div class="panel" id="tab-news">
+  <div class="news-header">
+    <div class="news-left">
+      <div class="status-pill offline" id="news-pill" style="font-size:7px;padding:4px 9px">
+        <div class="status-dot"></div>
+        <span id="news-pill-txt">CACHED</span>
+      </div>
+      <span class="news-count" id="news-count">8 ARTICLES</span>
+    </div>
+    <button class="fetch-btn" id="news-fetch-btn" onclick="loadNews()">[ FETCH LIVE NEWS ]</button>
+  </div>
+  <div class="news-filters">
+    <span class="filter-lbl">FILTER:</span>
+    <button class="ntog n-all active" onclick="filterNews('ALL',this)">ALL</button>
+    <button class="ntog n-inj" onclick="filterNews('INJURY',this)">INJURY</button>
+    <button class="ntog n-sq" onclick="filterNews('SQUAD',this)">SQUAD</button>
+    <button class="ntog n-fm" onclick="filterNews('FORM',this)">FORM</button>
+    <button class="ntog n-ma" onclick="filterNews('MATCH',this)">MATCH</button>
+  </div>
+  <div id="news-container">
+    <div class="ni" data-tag="INJURY"><span class="ntg tg-inj">INJURY</span><div class="nh">Josh Hazlewood ruled out of RCB's IPL 2026 opener — Jacob Duffy named replacement pacer</div><div class="nm">19 MAR 2026 · CRICBUZZ</div></div>
+    <div class="ni" data-tag="INJURY"><span class="ntg tg-inj">INJURY</span><div class="nh">Pat Cummins confirmed unavailable for SRH's first match — Harshal Patel to lead SRH attack</div><div class="nm">19 MAR 2026 · ESPNCRICINFO</div></div>
+    <div class="ni" data-tag="INJURY"><span class="ntg tg-inj">DOUBT</span><div class="nh">Eshan Malinga doubtful for SRH opener — fitness test scheduled on match morning</div><div class="nm">18 MAR 2026 · CRICBUZZ</div></div>
+    <div class="ni" data-tag="SQUAD"><span class="ntg tg-sq">SQUAD</span><div class="nh">Jacob Bethell named in RCB XI — Livingstone released ahead of IPL 2026 auction</div><div class="nm">17 MAR 2026 · CRICBUZZ</div></div>
+    <div class="ni" data-tag="FORM"><span class="ntg tg-fm">FORM</span><div class="nh">Virat Kohli arrives in Bengaluru — "Ready to give everything for RCB in our home opener"</div><div class="nm">16 MAR 2026 · NDTV SPORTS</div></div>
+    <div class="ni" data-tag="SQUAD"><span class="ntg tg-sq">AUCTION</span><div class="nh">IPL 2026 mega auction: RCB retained Kohli, Padikkal — signed Bethell for ₹18.5Cr</div><div class="nm">15 MAR 2026 · CRICKET.COM</div></div>
+    <div class="ni" data-tag="MATCH"><span class="ntg tg-ma">MATCH</span><div class="nh">Chinnaswamy sells out in 4 hours for IPL 2026 opener — 35,000 fans expected</div><div class="nm">14 MAR 2026 · TOI SPORTS</div></div>
+    <div class="ni" data-tag="FORM"><span class="ntg tg-fm">FORM</span><div class="nh">Ishan Kishan named SRH captain — scored 103 in last T20I, carrying strong form into IPL 2026</div><div class="nm">13 MAR 2026 · ESPNCRICINFO</div></div>
+  </div>
+</div>
+
+</div>
+<script>
+const ML_RCB=24.3,ML_SRH=75.7;
+let useWeighted=false;
+const factors=[
+  {id:'form', n:'TEAM FORM',   w:30,rcb:9.0,srh:4.5,rl:'11/15 · Last 8: 7/8',sl:'6/14 · Last 8: 4/8'},
+  {id:'bat',  n:'BATTING',     w:25,rcb:6.5,srh:6.8,rl:'KOHLI 9.6 · PAD 8.4', sl:'ABHI 6.9 · KLAAS 6.3'},
+  {id:'bowl', n:'BOWLING',     w:15,rcb:5.0,srh:6.5,rl:'HAZ OUT · DAYAL 4.6', sl:'UNADKAT 8.9 · CUM OUT'},
+  {id:'venue',n:'VENUE + H2H', w:20,rcb:8.5,srh:4.5,rl:'5-3 CHINNASWAMY',     sl:'AWAY RECORD WEAK'},
+  {id:'toss', n:'TOSS IMPACT', w:10,rcb:5.0,srh:5.0,rl:'TBD — set toss above', sl:'TBD — set toss above'},
+];
+function buildFacs(){
+  const w=document.getElementById('facs');
+  factors.forEach(f=>{
+    const rp=Math.round(f.rcb/(f.rcb+f.srh)*100);
+    const d=document.createElement('div');d.className='fm-card';
+    d.innerHTML=`<div class="fm-top"><span class="fm-name">${f.n}</span><span class="fm-wt" id="fw-${f.id}">${f.w}%</span></div>
+    <div class="fm-bar"><div class="fm-r" style="width:${rp}%"></div><div class="fm-s" style="width:${100-rp}%"></div></div>
+    <input type="range" min="0" max="50" step="1" value="${f.w}" oninput="updF('${f.id}',this.value)">
+    <div class="fm-vals"><span class="fm-rv" id="fr-${f.id}">${f.rl}</span><span class="fm-sv" id="fs-${f.id}">${f.sl}</span></div>`;
+    w.appendChild(d);
+  });
+}
+function updF(id,val){factors.find(f=>f.id===id).w=parseInt(val);document.getElementById('fw-'+id).textContent=val+'%';compute();}
+function toggleMode(){setMode(!useWeighted)}
+function setMode(wt){
+  useWeighted=wt;
+  const tog=document.getElementById('tog'),ll=document.getElementById('lbl-l'),lr=document.getElementById('lbl-r');
+  if(wt){tog.classList.add('on');ll.classList.remove('active-l');lr.classList.add('active-r');document.getElementById('ml-mode').style.display='none';document.getElementById('wt-mode').style.display='block';}
+  else{tog.classList.remove('on');ll.classList.add('active-l');lr.classList.remove('active-r');document.getElementById('ml-mode').style.display='block';document.getElementById('wt-mode').style.display='none';}
+  compute();
+}
+function compute(){
+  const toss=document.getElementById('toss-sel').value;
+  // Update toss factor display label
+  const tossFac=factors.find(f=>f.id==='toss');
+  if(toss==='RCB'){tossFac.rl='RCB WINS → CHASE (+3%)';tossFac.sl='SRH BOWLS FIRST';}
+  else if(toss==='SRH'){tossFac.rl='RCB BOWLS FIRST';tossFac.sl='SRH WINS → CHASE (+3%)';}
+  else{tossFac.rl='TBD — set toss above';tossFac.sl='TBD — set toss above';}
+  // Update toss slider labels if visible
+  const frEl=document.getElementById('fr-toss');
+  const fsEl=document.getElementById('fs-toss');
+  if(frEl) frEl.textContent='› RCB: '+tossFac.rl;
+  if(fsEl) fsEl.textContent='SRH: '+tossFac.sl+' ‹';
+
+  let rS=0,sS=0;
+  factors.forEach(f=>{
+    let rv=f.rcb,sv=f.srh;
+    if(f.id==='toss'){if(toss==='RCB'){rv=9;sv=3;}else if(toss==='SRH'){rv=3;sv=9;}else{rv=5;sv=5;}}
+    rS+=f.w*rv;sS+=f.w*sv;
+  });
+  const tot=rS+sS,wtR=Math.round(rS/tot*100),wtS=100-wtR;
+  setEl('wt-rcb-pct',wtR+'%');setEl('wt-srh-pct',wtS+'%');
+  // ML: apply toss as adjustment on base prediction
+  // Chinnaswamy data: chasing wins 52% vs 44% batting first → +3% for toss winner choosing chase
+  let mlR=ML_RCB;
+  if(toss==='RCB') mlR=Math.round((ML_RCB+3)*10)/10;
+  else if(toss==='SRH') mlR=Math.round((ML_RCB-3)*10)/10;
+  setEl('ml-rcb-pct',mlR+'%');setEl('ml-srh-pct',Math.round((100-mlR)*10)/10+'%');
+  const dispR=useWeighted?wtR:Math.round(mlR),dispS=100-dispR;
+  setEl('rpp',dispR+'%');setEl('spp',dispS+'%');
+  document.getElementById('hbr').style.width=dispR+'%';document.getElementById('hbs').style.width=dispS+'%';
+  document.getElementById('vbr').style.height=dispR+'%';document.getElementById('vbs').style.height=dispS+'%';
+  document.getElementById('cpct').textContent=dispR+'|'+dispS;
+  const winner=dispR>=dispS?'RCB PREDICTED TO WIN':'SRH PREDICTED TO WIN';
+  const margin=Math.abs(dispR-dispS);
+  let conf,cls;
+  if(margin>=20){conf='HIGH CONFIDENCE';cls='ch';}else if(margin>=10){conf='MEDIUM CONFIDENCE';cls='cm';}else{conf='TOO CLOSE TO CALL';cls='cl';}
+  document.getElementById('vt').textContent=`${winner} · ${useWeighted?'WEIGHTED':'ML'}`;
+  const b=document.getElementById('cfb');b.textContent=conf;b.className='cf '+cls;
+}
+function setEl(id,val){const el=document.getElementById(id);if(!el)return;el.textContent=val;el.classList.add('ticked');setTimeout(()=>el.classList.remove('ticked'),250);}
+
+const rcbBat=[
+  {n:'V. KOHLI',   i:'VK',s:9.6,l:[62,43,54,12,43],r:'BAT',tg:'fire',tl:'ON FIRE'},
+  {n:'D. PADIKKAL',i:'DP',s:8.4,l:[40,61,50,0,17], r:'BAT',tg:'fire',tl:'KEY PICK'},
+  {n:'P. SALT',    i:'PS',s:6.9,l:[26,62,30,56,16],r:'BAT/WK',tg:'ok',tl:'SOLID'},
+  {n:'J. BETHELL', i:'JB',s:5.8,l:[3,8,21,105,23], r:'BAT',tg:'ok',tl:'WC 105'},
+  {n:'J. SHARMA',  i:'JS',s:4.1,l:[20,7,24,85,24], r:'BAT/WK',tg:'',tl:''},
+  {n:'T. DAVID',   i:'TD',s:4.0,l:[50,23,19,2,1],  r:'BAT',tg:'w',tl:'OUT OF FORM'},
+  {n:'K. PANDYA',  i:'KP',s:4.3,l:[18,1,73,8,4],   r:'ALL',tg:'',tl:''},
+];
+const rcbBowl=[
+  {n:'J. HAZLEWOOD',i:'JH',s:7.6,l:[4,2,3,1,2],r:'PACE',tg:'out',tl:'RULED OUT M1'},
+  {n:'B. KUMAR',    i:'BK',s:4.6,l:[0,1,1,1,2],r:'PACE',tg:'w',tl:'FITNESS RISK'},
+  {n:'Y. DAYAL',    i:'YD',s:4.6,l:[1,0,0,2,1],r:'PACE',tg:'',tl:''},
+  {n:'S. SHARMA',   i:'SS',s:4.1,l:[0,1,0,3,0],r:'SPIN',tg:'',tl:''},
+  {n:'J. DUFFY',    i:'JD',s:3.5,l:[1,0,1,0,1],r:'PACE',tg:'ok',tl:'REPLACES JH'},
+];
+const srhBat=[
+  {n:'ABHISHEK S.', i:'AS',s:7.2,l:[0,74,59,34,32], r:'BAT',tg:'fire',tl:'EXPLOSIVE'},
+  {n:'H. KLAASEN',  i:'HK',s:6.3,l:[7,23,47,24,105],r:'BAT/WK',tg:'ok',tl:'BIG HITTER'},
+  {n:'I. KISHAN',   i:'IK',s:6.2,l:[44,13,35,94,29],r:'CAPT',tg:'ok',tl:'CAPTAIN'},
+  {n:'T. HEAD',     i:'TH',s:3.5,l:[0,19,20,17,76], r:'BAT',tg:'w',tl:'INCONSISTENT'},
+  {n:'N. REDDY',    i:'NR',s:2.3,l:[2,19,21,5,4],   r:'ALL',tg:'',tl:''},
+  {n:'ANIKET V.',   i:'AV',s:2.3,l:[19,3,5,26,12],  r:'BAT',tg:'low',tl:'LIMITED DATA'},
+];
+const srhBowl=[
+  {n:'J. UNADKAT', i:'JU',s:8.9,l:[2,3,1,1,4],r:'PACE',tg:'fire',tl:'BEST BOWLER'},
+  {n:'E. MALINGA', i:'EM',s:7.3,l:[1,2,3,3,2],r:'PACE',tg:'w',tl:'DOUBTFUL'},
+  {n:'P. CUMMINS', i:'PC',s:6.6,l:[1,3,0,3,0],r:'PACE',tg:'out',tl:'RULED OUT M1'},
+  {n:'H. PATEL',   i:'HP',s:4.1,l:[0,1,1,1,0],r:'PACE',tg:'',tl:''},
+  {n:'Z. ANSARI',  i:'ZA',s:4.7,l:[1,0,2,1,0],r:'SPIN',tg:'',tl:''},
+];
+function buildPlayers(players,cid,isBowl){
+  const c=document.getElementById(cid);
+  players.forEach(p=>{
+    const mx=Math.max(...p.l,1);
+    const sparks=p.l.map(v=>`<div class="spb" style="height:${Math.max(1,Math.round(v/mx*12))}px" title="${v}"></div>`).join('');
+    const tag=p.tg?`<span class="ptg tg-${p.tg}">${p.tl}</span>`:'';
+    const d=document.createElement('div');d.className='pr';
+    d.innerHTML=`<div class="pi">${p.i}</div><div class="pinfo"><div class="pn">${p.n} ${tag}</div><div class="pm">${p.r} · ${isBowl?'WKTS':'RUNS'}: ${p.l.join(', ')}</div></div><div class="spark">${sparks}</div><div class="psc">${p.s}</div>`;
+    c.appendChild(d);
+  });
+}
+
+/* LIVE */
+let refreshTimer=300,refreshInterval=null;
+function setPill(pillId,txtId,isLive,txt){
+  const pill=document.getElementById(pillId),t=document.getElementById(txtId);
+  pill.className='status-pill '+(isLive?'online':'offline');
+  t.textContent=txt;
+}
+function setLiveTabState(isLive){
+  const tab=document.querySelector('.tab[onclick*="\'live\'"]');
+  if(!tab) return;
+  if(isLive){
+    tab.style.color='var(--ok)';
+    tab.innerHTML='[ LIVE <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--ok);animation:pulse-g 1s ease-in-out infinite;vertical-align:middle;margin-left:2px"></span> ]';
+  } else {
+    tab.style.color='';
+    tab.textContent='[ LIVE ]';
+  }
+}
+function setNewsTabState(isLive){
+  const tab=document.querySelector('.tab[onclick*="\'news\'"]');
+  if(!tab) return;
+  if(isLive){
+    tab.style.color='var(--ok)';
+    tab.innerHTML='[ NEWS <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--ok);animation:pulse-g 1s ease-in-out infinite;vertical-align:middle;margin-left:2px"></span> ]';
+  } else {
+    tab.style.color='';
+    tab.textContent='[ NEWS ]';
+  }
+}
+function fetchLive(){
+  const content=document.getElementById('live-content');
+  setPill('live-pill','live-pill-txt',false,'CHECKING');
+  document.getElementById('live-status-txt').textContent='CONTACTING API...';
+  fetch('https://api.cricapi.com/v1/currentMatches?apikey=3e51f85e-8f8a-4f19-89a9-e74c52300884&offset=0')
+    .then(r=>r.json())
+    .then(data=>{
+      const ipl=data?.data?.find(m=>m.name&&(m.name.includes('RCB')||m.name.includes('Royal')));
+      if(ipl){
+        setPill('live-pill','live-pill-txt',true,'LIVE');
+        setLiveTabState(true);
+        document.getElementById('live-status-txt').textContent='MATCH IN PROGRESS';
+        document.getElementById('live-scores').style.display='grid';
+        const s=ipl.score||[];
+        document.getElementById('rcb-score').textContent=(s[0]?.r||'—')+'/'+(s[0]?.w||'—');
+        document.getElementById('srh-score').textContent=(s[1]?.r||'—')+'/'+(s[1]?.w||'—');
+        document.getElementById('rcb-extra').textContent=s[0]?.o?s[0].o+' OVS':'BATTING';
+        document.getElementById('srh-extra').textContent=s[1]?.o?s[1].o+' OVS':'BOWLING';
+        content.textContent=`MATCH: ${ipl.name}\nSTATUS: ${ipl.status}`;
+        content.style.borderColor='rgba(52,199,89,0.3)';
+      } else {
+        setPill('live-pill','live-pill-txt',false,'NOT LIVE');
+        setLiveTabState(false);
+        document.getElementById('live-status-txt').textContent='MATCH NOT STARTED YET';
+        content.textContent=`LIVE FEED READY\n\nMATCH: RCB vs SRH\nDATE:  28 MAR 2026 · 19:30 IST\nVENUE: M Chinnaswamy Stadium\n\nScores will appear here automatically\nonce the match begins.\n\nPAR SCORE: 173 · CHASE WIN RATE: 52%`;
+        content.style.borderColor='';
+      }
+    })
+    .catch(()=>{
+      setPill('live-pill','live-pill-txt',false,'WAITING');
+      setLiveTabState(false);
+      document.getElementById('live-status-txt').textContent='MATCH NOT STARTED YET';
+      content.textContent=`LIVE FEED READY\n\nMATCH: RCB vs SRH\nDATE:  28 MAR 2026 · 19:30 IST\nVENUE: M Chinnaswamy Stadium\n\nScores will appear here automatically\nonce the match begins.\n\nPAR SCORE: 173 · CHASE WIN RATE: 52%`;
+      content.style.borderColor='';
+    })
+    .finally(()=>{refreshTimer=300;startTimer();});
+}
+function startTimer(){
+  if(refreshInterval)clearInterval(refreshInterval);
+  refreshInterval=setInterval(()=>{
+    refreshTimer--;
+    const m=Math.floor(refreshTimer/60),s=refreshTimer%60;
+    document.getElementById('live-timer').textContent=`NEXT REFRESH: ${m}:${s.toString().padStart(2,'0')}`;
+    if(refreshTimer<=0)fetchLive();
+  },1000);
+}
+
+/* NEWS */
+let activeFilter='ALL';
+function filterNews(tag,btn){
+  activeFilter=tag;
+  document.querySelectorAll('.ntog').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.ni').forEach(item=>{
+    item.classList.toggle('hidden',tag!=='ALL'&&item.getAttribute('data-tag')!==tag);
+  });
+}
+async function loadNews(){
+  const btn=document.getElementById('news-fetch-btn');
+  btn.classList.add('loading');btn.textContent='[ FETCHING... ]';
+  setPill('news-pill','news-pill-txt',false,'LOADING');
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:1000,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        messages:[{role:'user',content:'Search latest news RCB vs SRH IPL 2026 March 28 injuries squad changes. Return JSON array: tag (INJURY/SQUAD/FORM/MATCH), headline, source, date. JSON only.'}]
+      })
+    });
+    const data=await resp.json();
+    const txt=data.content?.find(b=>b.type==='text');
+    if(txt){
+      const news=JSON.parse(txt.text.replace(/```json|```/g,'').trim());
+      renderNews(news);
+      setPill('news-pill','news-pill-txt',true,'LIVE');
+      setNewsTabState(true);
+      document.getElementById('news-count').textContent=`${news.length} ARTICLES`;
+    }
+  }catch(e){
+    setPill('news-pill','news-pill-txt',false,'CACHED');
+    setNewsTabState(false);
+    document.getElementById('news-count').textContent='CACHED · API UNAVAILABLE';
+  }
+  finally{btn.classList.remove('loading');btn.textContent='[ FETCH LIVE NEWS ]';}
+}
+function renderNews(items){
+  const c=document.getElementById('news-container');c.innerHTML='';
+  const tm={INJURY:'tg-inj',SQUAD:'tg-sq',FORM:'tg-fm',MATCH:'tg-ma'};
+  items.forEach(item=>{
+    const d=document.createElement('div');d.className='ni';d.setAttribute('data-tag',item.tag);
+    if(activeFilter!=='ALL'&&item.tag!==activeFilter)d.classList.add('hidden');
+    d.innerHTML=`<span class="ntg ${tm[item.tag]||'tg-ma'}">${item.tag}</span><div class="nh">${item.headline}</div><div class="nm">${item.date||''} · ${item.source||''}</div>`;
+    c.appendChild(d);
+  });
+}
+
+/* TAB SWITCH */
+function sw(name,e){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  e.target.classList.add('active');
+  if(name==='news')loadNews();
+}
+
+/* INIT */
+buildFacs();
+buildPlayers(rcbBat,'rcb-bat',false);buildPlayers(rcbBowl,'rcb-bowl',true);
+buildPlayers(srhBat,'srh-bat',false);buildPlayers(srhBowl,'srh-bowl',true);
+compute();fetchLive();startTimer();
+</script>
+</body>
+</html>
