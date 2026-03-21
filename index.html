@@ -338,8 +338,10 @@ input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.5)}
 .ntog.n-sq{color:var(--ok);border-color:rgba(52,199,89,0.3)}.ntog.n-sq.active{background:rgba(52,199,89,0.06)}
 .ntog.n-fm{color:var(--srh);border-color:rgba(196,127,23,0.3)}.ntog.n-fm.active{background:rgba(196,127,23,0.06)}
 .ntog.n-ma{color:var(--rcb);border-color:rgba(200,55,26,0.3)}.ntog.n-ma.active{background:rgba(200,55,26,0.06)}
-.ni{padding:9px 14px;border-bottom:1px solid var(--b);cursor:pointer;transition:background 0.15s}
+.ni{padding:9px 14px;border-bottom:1px solid var(--b);cursor:pointer;transition:background 0.15s;color:var(--t1)}
 .ni:hover{background:var(--s1)}.ni.hidden{display:none}
+.ni .nm{transition:color 0.15s}
+.ni:hover .nm{color:var(--t2)}
 .ntg{font-family:var(--mono);font-size:6px;font-weight:600;letter-spacing:0.1em;padding:1px 4px;border:1px solid;text-transform:uppercase;display:inline-block;margin-bottom:4px}
 .ntg.tg-inj{color:var(--err);border-color:rgba(255,69,58,0.3);background:rgba(255,69,58,0.06)}
 .ntg.tg-sq{color:var(--ok);border-color:rgba(52,199,89,0.3);background:rgba(52,199,89,0.06)}
@@ -434,39 +436,38 @@ input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.5)}
     </select>
   </div>
   <div id="ml-mode">
-    <div class="sec"><span class="stx">ML ENSEMBLE // GRADIENT BOOST + RANDOM FOREST</span><div class="sl"></div></div>
+    <div class="sec"><span class="stx">AMIT'S MODEL V1 // XGBOOST + RF + ELO + SQUAD + CAPTAINCY</span><div class="sl"></div></div>
     <div class="pred-main">
       <div class="pred-split">
-        <div class="pred-card rcb-card"><div class="pc-lbl">RCB WIN PROBABILITY</div><div class="pc-pct r" id="ml-rcb-pct">24.3%</div><div class="pc-sub">GB: 13.1% · RF: 39.9%<br>TOSS ADJUSTS ±3%</div></div>
-        <div class="pred-card srh-card"><div class="pc-lbl">SRH WIN PROBABILITY</div><div class="pc-pct s" id="ml-srh-pct">75.7%</div><div class="pc-sub">BAT FORM 197 vs 177<br>H2H ADVANTAGE</div></div>
+        <div class="pred-card rcb-card"><div class="pc-lbl">RCB WIN PROBABILITY</div><div class="pc-pct r" id="ml-rcb-pct">40.9%</div><div class="pc-sub">XGBoost 30.7% · RF 48.2%<br>TOSS ADJUSTS ±3%</div></div>
+        <div class="pred-card srh-card"><div class="pc-lbl">SRH WIN PROBABILITY</div><div class="pc-pct s" id="ml-srh-pct">59.1%</div><div class="pc-sub">Elo gap: +32 RCB<br>Squad adj: +3.2% RCB</div></div>
       </div>
       <div class="inj-strip">
-        <div class="inj-title">INJURY IMPACT ON BASE PREDICTION</div>
-        <div class="inj-item"><span class="inj-name">BASE ML (NO INJURIES)</span><span class="inj-delta neu">RCB 22.0%</span></div>
-        <div class="inj-item"><span class="inj-name">HAZLEWOOD OUT (7.6 → DUFFY 3.5)</span><span class="inj-delta neg">−5.0%</span></div>
-        <div class="inj-item"><span class="inj-name">CUMMINS OUT (6.6 → ABSENT)</span><span class="inj-delta pos">+4.0%</span></div>
-        <div class="inj-item"><span class="inj-name">MALINGA DOUBTFUL (EV AT 50%)</span><span class="inj-delta pos">+1.5%</span></div>
+        <div class="inj-title">HOW WE GOT TO 40.9%</div>
+        <div class="inj-item"><span class="inj-name">BASE ENSEMBLE (XGBoost 60% + RF 40%)</span><span class="inj-delta neu">RCB 37.7%</span></div>
+        <div class="inj-item"><span class="inj-name">SQUAD STRENGTH (RCB 5.71 vs SRH 4.10)</span><span class="inj-delta pos">+3.2%</span></div>
+        <div class="inj-item"><span class="inj-name">CAPTAINCY (Patidar +0.5 · Kishan -0.5)</span><span class="inj-delta pos">INCLUDED ↑</span></div>
+        <div class="inj-item"><span class="inj-name">WEATHER (March Bengaluru — dry season)</span><span class="inj-delta neu">0%</span></div>
         <div style="height:1px;background:var(--b);margin:6px 0"></div>
-        <div class="inj-item"><span class="inj-name" style="color:var(--t1);font-weight:600">FINAL ADJUSTED</span><span class="inj-delta" style="color:var(--rcb);font-size:11px">RCB 24.3%</span></div>
+        <div class="inj-item"><span class="inj-name" style="color:var(--t1);font-weight:600">AMIT'S V1 FINAL</span><span class="inj-delta" style="color:var(--rcb);font-size:11px">RCB 40.9%</span></div>
       </div>
     </div>
-    <div class="sec"><span class="stx">MODEL PERFORMANCE</span><div class="sl"></div></div>
+    <div class="sec"><span class="stx">MODEL PERFORMANCE // AMIT'S V1</span><div class="sl"></div></div>
     <div class="perf-panel">
       <div class="gauge-row">
-        <div class="gauge"><div class="g-lbl">GRADIENT BOOSTING</div><div class="g-val" style="color:var(--warn)">49.0%</div><div class="g-sub">5-FOLD CV ± 3.2%<br>1,146 MATCHES · 20 FEATURES</div><div class="g-bar"><div class="g-fill" style="width:49%;background:var(--warn)"></div></div></div>
-        <div class="gauge"><div class="g-lbl">RANDOM FOREST</div><div class="g-val" style="color:var(--ok)">52.4%</div><div class="g-sub">5-FOLD CV ± 4.7%<br>ENSEMBLE WEIGHT: 40%</div><div class="g-bar"><div class="g-fill" style="width:52.4%;background:var(--ok)"></div></div></div>
+        <div class="gauge"><div class="g-lbl">XGBOOST (PRIMARY)</div><div class="g-val" style="color:var(--ok)">52.7%</div><div class="g-sub">5-FOLD CV ± 1.8%<br>1,090 MATCHES · 16 FEATURES · ELO</div><div class="g-bar"><div class="g-fill" style="width:52.7%;background:var(--ok)"></div></div></div>
+        <div class="gauge"><div class="g-lbl">RANDOM FOREST</div><div class="g-val" style="color:var(--warn)">51.0%</div><div class="g-sub">5-FOLD CV ± 2.1%<br>ENSEMBLE WEIGHT: 40%</div><div class="g-bar"><div class="g-fill" style="width:51%;background:var(--warn)"></div></div></div>
       </div>
-      <div class="fi-title">TOP FEATURES // GRADIENT BOOSTING</div>
-      <div class="fi-row"><div class="fi-n">Bowl Form Ratio</div><div class="fi-b"><div class="fi-f" style="width:100%"></div></div><div class="fi-v">11.8%</div></div>
-      <div class="fi-row"><div class="fi-n">Bat Form Ratio</div><div class="fi-b"><div class="fi-f" style="width:94%"></div></div><div class="fi-v">11.1%</div></div>
-      <div class="fi-row"><div class="fi-n">Team Bat Average</div><div class="fi-b"><div class="fi-f" style="width:76%"></div></div><div class="fi-v">9.0%</div></div>
-      <div class="fi-row"><div class="fi-n">Bowl Conceded Avg</div><div class="fi-b"><div class="fi-f" style="width:75%"></div></div><div class="fi-v">8.8%</div></div>
-      <div class="fi-row"><div class="fi-n">Venue Win Rate</div><div class="fi-b"><div class="fi-f" style="width:57%"></div></div><div class="fi-v">6.7%</div></div>
-      <div class="fi-row"><div class="fi-n">H2H Win Rate</div><div class="fi-b"><div class="fi-f" style="width:48%"></div></div><div class="fi-v">5.7%</div></div>
+      <div class="fi-title">TOP FEATURES // AMIT'S XGBOOST V1</div>
+      <div class="fi-row"><div class="fi-n">Elo Diff</div><div class="fi-b"><div class="fi-f" style="width:100%"></div></div><div class="fi-v">~15%</div></div>
+      <div class="fi-row"><div class="fi-n">Team Form (t1/t2)</div><div class="fi-b"><div class="fi-f" style="width:90%"></div></div><div class="fi-v">~13%</div></div>
+      <div class="fi-row"><div class="fi-n">Venue Win Rate</div><div class="fi-b"><div class="fi-f" style="width:75%"></div></div><div class="fi-v">~11%</div></div>
+      <div class="fi-row"><div class="fi-n">H2H Record</div><div class="fi-b"><div class="fi-f" style="width:60%"></div></div><div class="fi-v">~9%</div></div>
+      <div class="fi-row"><div class="fi-n">Toss Impact</div><div class="fi-b"><div class="fi-f" style="width:35%"></div></div><div class="fi-v">~5%</div></div>
       <div class="model-note">
-        <div class="mn-row"><span class="mn-key">WHY ~51%?</span><span class="mn-val">IPL is a high-variance sport. Best published models hit 55–58%. Our 52% on 1,146 matches is honest.</span></div>
-        <div class="mn-row"><span class="mn-key">WHY SRH?</span><span class="mn-val">SRH scored 197 avg/match vs RCB 177 recently. H2H 60-40 SRH. Model sees team aggregates not individual stars.</span></div>
-        <div class="mn-row"><span class="mn-key">GAP W/ WEIGHTED?</span><span class="mn-val">Weighted model sees Kohli 9.6, Padikkal 8.4, Unadkat 8.9. ML doesn't. Truth is likely RCB 40–45%.</span></div>
+        <div class="mn-row"><span class="mn-key">ACCURACY</span><span class="mn-val">XGBoost 52.7% beats our GB 49.0%. Elo ratings are the key new feature — captures team momentum better than raw win rate.</span></div>
+        <div class="mn-row"><span class="mn-key">MODEL GAP</span><span class="mn-val">Amit's model: RCB 40.9% · Claude model: RCB 24.3% · Gap = 16.6%. Main reasons: H2H data (50% vs 40%), Elo captures RCB strength, squad score adds +3.2%.</span></div>
+        <div class="mn-row"><span class="mn-key">HONEST TAKE</span><span class="mn-val">Balanced estimate RCB 32-33%. Both models agree SRH are historical favourites. RCB edge = Kohli 9.6 form + home ground + Patidar confidence.</span></div>
       </div>
     </div>
   </div>
@@ -578,20 +579,52 @@ Auto-refreshes every 5 minutes.</div>
     <button class="ntog n-ma" onclick="filterNews('MATCH',this)">MATCH</button>
   </div>
   <div id="news-container">
-    <div class="ni" data-tag="INJURY"><span class="ntg tg-inj">INJURY</span><div class="nh">Josh Hazlewood ruled out of RCB's IPL 2026 opener — Jacob Duffy named replacement pacer</div><div class="nm">19 MAR 2026 · CRICBUZZ</div></div>
-    <div class="ni" data-tag="INJURY"><span class="ntg tg-inj">INJURY</span><div class="nh">Pat Cummins confirmed unavailable for SRH's first match — Harshal Patel to lead SRH attack</div><div class="nm">19 MAR 2026 · ESPNCRICINFO</div></div>
-    <div class="ni" data-tag="INJURY"><span class="ntg tg-inj">DOUBT</span><div class="nh">Eshan Malinga doubtful for SRH opener — fitness test scheduled on match morning</div><div class="nm">18 MAR 2026 · CRICBUZZ</div></div>
-    <div class="ni" data-tag="SQUAD"><span class="ntg tg-sq">SQUAD</span><div class="nh">Jacob Bethell named in RCB XI — Livingstone released ahead of IPL 2026 auction</div><div class="nm">17 MAR 2026 · CRICBUZZ</div></div>
-    <div class="ni" data-tag="FORM"><span class="ntg tg-fm">FORM</span><div class="nh">Virat Kohli arrives in Bengaluru — "Ready to give everything for RCB in our home opener"</div><div class="nm">16 MAR 2026 · NDTV SPORTS</div></div>
-    <div class="ni" data-tag="SQUAD"><span class="ntg tg-sq">AUCTION</span><div class="nh">IPL 2026 mega auction: RCB retained Kohli, Padikkal — signed Bethell for ₹18.5Cr</div><div class="nm">15 MAR 2026 · CRICKET.COM</div></div>
-    <div class="ni" data-tag="MATCH"><span class="ntg tg-ma">MATCH</span><div class="nh">Chinnaswamy sells out in 4 hours for IPL 2026 opener — 35,000 fans expected</div><div class="nm">14 MAR 2026 · TOI SPORTS</div></div>
-    <div class="ni" data-tag="FORM"><span class="ntg tg-fm">FORM</span><div class="nh">Ishan Kishan named SRH captain — scored 103 in last T20I, carrying strong form into IPL 2026</div><div class="nm">13 MAR 2026 · ESPNCRICINFO</div></div>
+    <a class="ni" data-tag="INJURY" href="https://crickettimes.com/2026/03/big-setback-for-rcb-how-many-matches-will-josh-hazlewood-miss-in-ipl-2026/" target="_blank" style="text-decoration:none;display:block">
+      <span class="ntg tg-inj">INJURY</span>
+      <div class="nh">Hazlewood officially ruled out of RCB's first two matches — SRH opener on Mar 28 and CSK on Apr 5 confirmed misses</div>
+      <div class="nm">21 MAR 2026 · CRICKET TIMES →</div>
+    </a>
+    <a class="ni" data-tag="INJURY" href="https://www.espncricinfo.com/story/ipl-2026-mitchell-starc-and-josh-hazlewood-likely-to-sit-out-initial-bit-for-delhi-capitals-and-rcb-1528465" target="_blank" style="text-decoration:none;display:block">
+      <span class="ntg tg-inj">INJURY</span>
+      <div class="nh">Hazlewood and Starc unlikely for first few IPL games — Cricket Australia managing workloads ahead of 21-Test calendar</div>
+      <div class="nm">20 MAR 2026 · ESPNCRICINFO →</div>
+    </a>
+    <a class="ni" data-tag="INJURY" href="https://www.espncricinfo.com/story/ipl-2026-srh-ishan-kishan-to-lead-sunrisers-hyderabad-in-pat-cummins-absence-1528345" target="_blank" style="text-decoration:none;display:block">
+      <span class="ntg tg-inj">INJURY</span>
+      <div class="nh">Pat Cummins ruled out of IPL 2026 opener — still recovering from lumbar stress injury that kept him out of T20 World Cup</div>
+      <div class="nm">18 MAR 2026 · ESPNCRICINFO →</div>
+    </a>
+    <a class="ni" data-tag="SQUAD" href="https://www.espncricinfo.com/story/ipl-2026-srh-ishan-kishan-to-lead-sunrisers-hyderabad-in-pat-cummins-absence-1528345" target="_blank" style="text-decoration:none;display:block">
+      <span class="ntg tg-sq">SQUAD</span>
+      <div class="nh">Ishan Kishan named SRH interim captain — Abhishek Sharma appointed vice-captain in Cummins' absence</div>
+      <div class="nm">18 MAR 2026 · ESPNCRICINFO →</div>
+    </a>
+    <a class="ni" data-tag="SQUAD" href="https://www.iplt20.com/news/4250/ishan-kishan-appointed-interim-captain-of-sunrisers-hyderabad-for-tata-ipl-2026" target="_blank" style="text-decoration:none;display:block">
+      <span class="ntg tg-sq">SQUAD</span>
+      <div class="nh">SRH official: "Pat Cummins will miss a few games — Ishan Kishan will be Captain, Abhishek Sharma the Vice-Captain"</div>
+      <div class="nm">18 MAR 2026 · IPL T20 OFFICIAL →</div>
+    </a>
+    <a class="ni" data-tag="INJURY" href="https://www.crictracker.com/cricket-news/ipl-2026-josh-hazlewood-set-to-miss-initial-few-games-for-rcb-4216/" target="_blank" style="text-decoration:none;display:block">
+      <span class="ntg tg-inj">INJURY</span>
+      <div class="nh">Hazlewood's last appearance was Sheffield Shield in Nov 2025 — hamstring and Achilles issues ongoing, joining RCB after April 11</div>
+      <div class="nm">20 MAR 2026 · CRICTRACKER →</div>
+    </a>
+    <a class="ni" data-tag="FORM" href="https://newsable.asianetnews.com/sports/cricket-ipl-2026-is-ishan-kishan-the-right-choice-to-lead-srh-check-out-his-t20-captaincy-stats-articleshow-2atswiy" target="_blank" style="text-decoration:none;display:block">
+      <span class="ntg tg-fm">FORM</span>
+      <div class="nh">Kishan comes in red-hot form — 317 runs in T20 WC at SR 199, led Jharkhand to Syed Mushtaq Ali title in December</div>
+      <div class="nm">18 MAR 2026 · ASIANET NEWSABLE →</div>
+    </a>
+    <a class="ni" data-tag="MATCH" href="https://sportscafe.in/cricket/articles/2026/mar/17/big-setbacks-for-rcb-and-srh-before-indian-premier-league-opener" target="_blank" style="text-decoration:none;display:block">
+      <span class="ntg tg-ma">MATCH</span>
+      <div class="nh">Both teams missing premier Aussie pacers — RCB without Hazlewood, SRH without Cummins for IPL 2026 opener</div>
+      <div class="nm">17 MAR 2026 · SPORTS CAFE →</div>
+    </a>
   </div>
 </div>
 
 </div>
 <script>
-const ML_RCB=24.3,ML_SRH=75.7;
+const ML_RCB=40.9,ML_SRH=59.1;
 let useWeighted=false;
 const factors=[
   {id:'form', n:'TEAM FORM',   w:30,rcb:9.0,srh:4.5,rl:'11/15 · Last 8: 7/8',sl:'6/14 · Last 8: 4/8'},
@@ -737,6 +770,8 @@ function setNewsTabState(isLive){
   }
 }
 function fetchLive(){
+  // Guard — never call API outside match window
+  if(!isMatchWindow()) return;
   const content=document.getElementById('live-content');
   setPill('live-pill','live-pill-txt',false,'CHECKING');
   document.getElementById('live-status-txt').textContent='CONTACTING API...';
@@ -773,9 +808,61 @@ function fetchLive(){
     })
     .finally(()=>{refreshTimer=300;startTimer();});
 }
+/* ── MATCH WINDOW: ping only between 19:00 IST and 00:00 IST on match days ── */
+const MATCH_DAYS = [
+  '2026-03-28', // RCB vs SRH opener
+  '2026-03-29', // Add future match dates here
+];
+
+function getISTTime(){
+  // IST = UTC + 5:30
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  return new Date(utc + (5.5 * 3600000));
+}
+
+function isMatchWindow(){
+  const ist = getISTTime();
+  const dateStr = ist.toISOString().slice(0,10);
+  const hour = ist.getHours();
+  const min = ist.getMinutes();
+  const isMatchDay = MATCH_DAYS.includes(dateStr);
+  // Window: 19:00 IST (toss time) to 00:00 IST (midnight)
+  const afterToss = hour >= 19;
+  const beforeMidnight = hour < 24;
+  return isMatchDay && afterToss && beforeMidnight;
+}
+
+function getTimeToWindow(){
+  const ist = getISTTime();
+  const dateStr = ist.toISOString().slice(0,10);
+  if(!MATCH_DAYS.includes(dateStr)){
+    // Find next match day
+    const nextMatch = MATCH_DAYS.find(d => d > dateStr);
+    if(nextMatch) return `NEXT MATCH: ${nextMatch} · LIVE FROM 19:00 IST`;
+    return 'NO UPCOMING MATCHES SCHEDULED';
+  }
+  const hour = ist.getHours(), min = ist.getMinutes();
+  if(hour < 19){
+    const minsLeft = (19 - hour - 1) * 60 + (60 - min);
+    const h = Math.floor(minsLeft/60), m = minsLeft % 60;
+    return `MATCH DAY · LIVE IN ${h}H ${m}M · TOSS AT 19:00 IST`;
+  }
+  return null; // in window
+}
+
 function startTimer(){
   if(refreshInterval)clearInterval(refreshInterval);
   refreshInterval=setInterval(()=>{
+    if(!isMatchWindow()){
+      // Outside window — show waiting message, don't fetch
+      const msg = getTimeToWindow();
+      document.getElementById('live-timer').textContent = msg || 'OUTSIDE MATCH WINDOW';
+      setPill('live-pill','live-pill-txt',false,'WAITING');
+      setLiveTabState(false);
+      document.getElementById('live-status-txt').textContent = 'WAITING FOR MATCH';
+      return;
+    }
     refreshTimer--;
     const m=Math.floor(refreshTimer/60),s=refreshTimer%60;
     document.getElementById('live-timer').textContent=`NEXT REFRESH: ${m}:${s.toString().padStart(2,'0')}`;
@@ -789,8 +876,15 @@ function filterNews(tag,btn){
   activeFilter=tag;
   document.querySelectorAll('.ntog').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.ni').forEach(item=>{
-    item.classList.toggle('hidden',tag!=='ALL'&&item.getAttribute('data-tag')!==tag);
+  document.querySelectorAll('#news-container .ni').forEach(item=>{
+    const itemTag = item.getAttribute('data-tag');
+    if(tag==='ALL'||itemTag===tag){
+      item.classList.remove('hidden');
+      item.style.display='block';
+    } else {
+      item.classList.add('hidden');
+      item.style.display='none';
+    }
   });
 }
 async function loadNews(){
@@ -826,9 +920,15 @@ function renderNews(items){
   const c=document.getElementById('news-container');c.innerHTML='';
   const tm={INJURY:'tg-inj',SQUAD:'tg-sq',FORM:'tg-fm',MATCH:'tg-ma'};
   items.forEach(item=>{
-    const d=document.createElement('div');d.className='ni';d.setAttribute('data-tag',item.tag);
-    if(activeFilter!=='ALL'&&item.tag!==activeFilter)d.classList.add('hidden');
-    d.innerHTML=`<span class="ntg ${tm[item.tag]||'tg-ma'}">${item.tag}</span><div class="nh">${item.headline}</div><div class="nm">${item.date||''} · ${item.source||''}</div>`;
+    const d=document.createElement('a');
+    d.className='ni';
+    d.setAttribute('data-tag',item.tag||'MATCH');
+    if(item.url){d.href=item.url;d.target='_blank';}
+    d.style.cssText='text-decoration:none;display:block;color:inherit';
+    if(activeFilter!=='ALL'&&(item.tag||'MATCH')!==activeFilter)d.style.display='none';
+    d.innerHTML=`<span class="ntg ${tm[item.tag]||'tg-ma'}">${item.tag||'NEWS'}</span>
+    <div class="nh">${item.headline}</div>
+    <div class="nm">${item.date||''} · ${item.source||''} →</div>`;
     c.appendChild(d);
   });
 }
@@ -846,7 +946,17 @@ function sw(name,e){
 buildFacs();
 buildPlayers(rcbBat,'rcb-bat',false);buildPlayers(rcbBowl,'rcb-bowl',true);
 buildPlayers(srhBat,'srh-bat',false);buildPlayers(srhBowl,'srh-bowl',true);
-compute();fetchLive();startTimer();
+compute();
+// Only ping API if inside match window (19:00–00:00 IST on match days)
+if(isMatchWindow()) fetchLive();
+else {
+  const msg = getTimeToWindow();
+  const content = document.getElementById('live-content');
+  if(content) content.textContent = `LIVE FEED READY\n\nMATCH: RCB vs SRH\nDATE:  28 MAR 2026 · 19:30 IST\nVENUE: M Chinnaswamy Stadium\n\n${msg||'Match window: 19:00 – 00:00 IST'}\n\nScores will appear automatically\nonce the match begins.\n\nPAR SCORE: 173 · CHASE WIN RATE: 52%`;
+  document.getElementById('live-status-txt').textContent = 'WAITING FOR MATCH';
+  document.getElementById('live-timer').textContent = getTimeToWindow() || 'LIVE FROM 19:00 IST';
+}
+startTimer();
 </script>
 </body>
 </html>
