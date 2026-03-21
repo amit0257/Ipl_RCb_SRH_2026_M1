@@ -957,6 +957,56 @@ else {
   document.getElementById('live-timer').textContent = getTimeToWindow() || 'LIVE FROM 19:00 IST';
 }
 startTimer();
-</script>
+
+/* ── IPL TUNE ON LOAD ── */
+function playIPLTune(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    // IPL anthem signature melody — D D E D G F# D D E D A G
+    const notes=[
+      {f:587.3,d:0.18,g:0.02},{f:587.3,d:0.18,g:0.02},{f:659.3,d:0.18,g:0.02},
+      {f:587.3,d:0.28,g:0.05},{f:783.9,d:0.18,g:0.02},{f:739.9,d:0.38,g:0.08},
+      {f:587.3,d:0.18,g:0.02},{f:587.3,d:0.18,g:0.02},{f:659.3,d:0.18,g:0.02},
+      {f:587.3,d:0.28,g:0.05},{f:880.0,d:0.18,g:0.02},{f:783.9,d:0.45,g:0.0},
+    ];
+    let t=ctx.currentTime+0.1;
+    notes.forEach(n=>{
+      const osc=ctx.createOscillator();
+      const gain=ctx.createGain();
+      osc.connect(gain);gain.connect(ctx.destination);
+      osc.type='sine';osc.frequency.setValueAtTime(n.f,t);
+      gain.gain.setValueAtTime(0,t);
+      gain.gain.linearRampToValueAtTime(0.18,t+0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001,t+n.d);
+      osc.start(t);osc.stop(t+n.d);
+      t+=n.d+n.g;
+    });
+  }catch(e){}
+}
+
+// Browsers require user gesture — play on first tap/click
+let tuneTriggered=false;
+function triggerTune(){
+  if(tuneTriggered)return;
+  tuneTriggered=true;
+  playIPLTune();
+  document.removeEventListener('click',triggerTune);
+  document.removeEventListener('touchstart',triggerTune);
+  const p=document.getElementById('audio-prompt');
+  if(p){p.style.opacity='0';setTimeout(()=>p.remove(),600);}
+}
+document.addEventListener('click',triggerTune);
+document.addEventListener('touchstart',triggerTune);
+
+// Subtle prompt at bottom
+const _p=document.createElement('div');
+_p.id='audio-prompt';
+_p.style.cssText='position:fixed;bottom:16px;left:50%;transform:translateX(-50%);font-family:IBM Plex Mono,monospace;font-size:9px;color:rgba(255,255,255,0.35);letter-spacing:0.15em;text-transform:uppercase;background:rgba(6,9,15,0.88);border:1px solid rgba(255,255,255,0.07);padding:6px 14px;z-index:999;pointer-events:none;opacity:0;animation:_fp 3s ease 0.8s forwards';
+_p.textContent='♪  TAP ANYWHERE FOR IPL ANTHEM';
+document.body.appendChild(_p);
+const _s=document.createElement('style');
+_s.textContent='@keyframes _fp{0%{opacity:0;transform:translateX(-50%) translateY(5px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}85%{opacity:1}100%{opacity:0.35}}#audio-prompt{transition:opacity 0.5s}';
+document.head.appendChild(_s);
+
 </body>
 </html>
